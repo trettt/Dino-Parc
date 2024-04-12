@@ -13,7 +13,7 @@ public class spino : MonoBehaviour
 	AudioSource[] source;
 	Animator anm;
 	Rigidbody body;
-	public AudioSource sound;
+	
 
 	//*************************************************************************************************************************************************
 	//Get components
@@ -46,10 +46,7 @@ public class spino : MonoBehaviour
 		body=GetComponent<Rigidbody>();
 		anm=GetComponent<Animator>();
 	}
-    private void Update()
-    { if(shared.IsActive)
-		sound.Play();
-    }
+  
 
     //*************************************************************************************************************************************************
     //Play sound
