@@ -81,7 +81,7 @@ public class VolcanoSimulation : MonoBehaviour
         {
             GUIStyle style = new GUIStyle(GUI.skin.label);
             style.fontSize = 20;
-            style.normal.textColor = Color.black;
+            style.normal.textColor = Color.white;
             style.fontStyle = FontStyle.Bold;
             style.alignment = TextAnchor.MiddleCenter;
 
