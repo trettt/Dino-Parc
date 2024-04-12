@@ -13,6 +13,7 @@ public class spino : MonoBehaviour
 	AudioSource[] source;
 	Animator anm;
 	Rigidbody body;
+	public AudioSource sound;
 
 	//*************************************************************************************************************************************************
 	//Get components
@@ -45,10 +46,14 @@ public class spino : MonoBehaviour
 		body=GetComponent<Rigidbody>();
 		anm=GetComponent<Animator>();
 	}
+    private void Update()
+    { if(shared.IsActive)
+		sound.Play();
+    }
 
-	//*************************************************************************************************************************************************
-	//Play sound
-	void OnCollisionStay(Collision col)
+    //*************************************************************************************************************************************************
+    //Play sound
+    void OnCollisionStay(Collision col)
 	{
 		int rndPainsnd=Random.Range(0, 4); AudioClip painSnd=null;
 		switch (rndPainsnd) { case 0: painSnd=Spino1; break; case 1: painSnd=Spino2; break; case 2: painSnd=Spino3; break; case 3: painSnd=Spino4; break; }

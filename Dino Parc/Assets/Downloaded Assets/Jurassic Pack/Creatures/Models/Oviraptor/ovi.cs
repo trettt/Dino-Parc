@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ovi : MonoBehaviour
@@ -14,10 +15,11 @@ public class ovi : MonoBehaviour
 	AudioSource[] source;
 	Animator anm;
 	Rigidbody body;
+    public AudioSource sound;
 
-	//*************************************************************************************************************************************************
-	//Get components
-	void Start()
+    //*************************************************************************************************************************************************
+    //Get components
+    void Start()
 	{
 		Right_Hips = transform.Find ("Ovi/root/pelvis/right leg0");
 		Right_Leg = transform.Find ("Ovi/root/pelvis/right leg0/right leg1");
@@ -58,11 +60,17 @@ public class ovi : MonoBehaviour
 		shared= GetComponent<shared>();
 		body=GetComponent<Rigidbody>();
 		anm=GetComponent<Animator>();
+		sound=GetComponent<AudioSource>();
 	}
 
-	//*************************************************************************************************************************************************
-	//Play sound
-	void OnCollisionStay(Collision col)
+    //*************************************************************************************************************************************************
+    //Play sound
+    private void Update()
+    {
+        if (shared.IsActive)
+            sound.Play();
+    }
+    void OnCollisionStay(Collision col)
 	{
 		int rndPainsnd=Random.Range(0, 4); AudioClip painSnd=null;
 		switch (rndPainsnd) { case 0: painSnd=Ovi1; break; case 1: painSnd=Ovi2; break; case 2: painSnd=Ovi3; break; case 3: painSnd=Ovi5; break; }
