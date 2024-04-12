@@ -159,44 +159,19 @@ public class shared : MonoBehaviour
 		else currframe = Mathf.Round((anm.GetCurrentAnimatorStateInfo (0).normalizedTime % 1.0f) * 15f);
 
 		//Manage health bar
-		if(Health>0)
-		{
-			if(loop>=100)	
-			{
-				if((Water==0 | Food==0 | Fatigue==0)) Health-=0.1f; //decrease health
-				else if(Health<100) Health+=0.1f; 
-				if(anm.GetInteger("Move")!=0) //decrease needs
-				{ 
-					Food-=Random.Range(0.0f, 0.1f);
-					if(!CanSwim) { Fatigue-=0.1f; Water-=0.1f; }
-					else { Fatigue=100; Water=100; }
-				}
-				loop=0;
-			} else loop ++;
-		}
-		else
-		{
-			Water=0; Food=0; Fatigue=0; behavior="Dead";
-			if(behaviorCount>0) behaviorCount=0;
-			else if(behaviorCount==-10000)
-			{
-				//Delete from list and destroy gameobject
-				if(manager.selected>=manager.creaturesList.IndexOf(transform.gameObject)) { if(manager.selected>0) manager.selected--; }
-				manager.creaturesList.Remove(transform.gameObject); Destroy(transform.gameObject);
-			}
-			else behaviorCount--;
-		}
+		
 
 		//Clamp all parameters
-		Health=Mathf.Clamp(Health, 0, 100); Water=Mathf.Clamp(Water, 0, 100); Food=Mathf.Clamp(Food, 0, 100); Fatigue=Mathf.Clamp(Fatigue, 0, 100);
+		Health =Mathf.Clamp(Health, 0, 100); Water=Mathf.Clamp(Water, 0, 100); Food=Mathf.Clamp(Food, 0, 100); Fatigue=Mathf.Clamp(Fatigue, 0, 100);
 	}
 
 ///***********************************************************************************************************************************************************************************************************
 // KEYBOARD / MOUSE AND JOYSTICK INPUT (MANAGER ONLY) (allow to control all JP creatures)
 	public void GetUserInputs(int idle1=0, int idle2=0, int idle3=0, int idle4=0, int eat=0, int drink=0, int sleep=0, int rise=0)
 	{
-		if(behavior=="Sleep" && anm.GetInteger("Move")!=0) behavior="Player";
-		else if(behaviorCount<=0) { objectTGT=null; behavior="Player"; behaviorCount=0; } else behaviorCount--;
+		//if(behavior=="Sleep" && anm.GetInteger("Move")!=0)
+		//	behavior="Player";
+		//else if(behaviorCount<=0) { objectTGT=null; behavior="Player"; behaviorCount=0; } else behaviorCount--;
 
 		// Current camera manager target ?
 		if(manager.UseManager && transform.gameObject==manager.creaturesList[manager.selected].gameObject && manager.CameraMode!=0)
@@ -235,96 +210,12 @@ public class shared : MonoBehaviour
 			}
 
 			//Jump key
-			if(CanJump && IsOnGround && Input.GetKey(KeyCode.Space)) anm.SetInteger ("Move", 3);
+		
 
 			//Moving keys
-			else if(Input.GetAxis("Horizontal")!=0 | Input.GetAxis("Vertical")!=0)
-			{
-				if(CanSwim | (CanFly&&!IsOnGround)) //Flying/swim type
-				{
-					if(Input.GetKey(KeyCode.Mouse1))
-					{
-						if(Input.GetAxis("Vertical")<0) anm.SetInteger ("Move", -1); //Backward
-						else if(Input.GetAxis("Vertical")>0) anm.SetInteger ("Move", 3); //Forward
-						else if(Input.GetAxis("Horizontal")>0) anm.SetInteger ("Move", -10); //Strafe-
-						else if(Input.GetAxis("Horizontal")<0) anm.SetInteger ("Move", 10); //Strafe+
-						else anm.SetInteger ("Move", 0);
-					}
-					else
-					{
-						if(run) anm.SetInteger ("Move", CanSwim?2:1); else  anm.SetInteger ("Move", CanSwim?1:2); 
-						delta = Mathf.DeltaAngle(manager.transform.eulerAngles.y, transform.eulerAngles.y-Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))*Mathf.Rad2Deg);
-						anm.SetFloat("Turn", Mathf.LerpAngle(anm.GetFloat("Turn"), Mathf.Clamp(-delta/15, -1.0f, 1.0f), ang_t)); //Turn
-					}
-				}
-				else //Default
-				{
-					if(HasSideAttack) // Tail attack
-					{
-						if(Input.GetAxis("Vertical")<0 && !run) anm.SetInteger ("Move", 1); //Forward
-						else if(Input.GetAxis("Vertical")>0) anm.SetInteger ("Move", 2); //Run
-						else if(Input.GetAxis("Horizontal")>0) anm.SetInteger ("Move", -10); //Strafe-
-						else if(Input.GetAxis("Horizontal")<0) anm.SetInteger ("Move", 10); //Strafe+
-					}
-					else if(Input.GetKey(KeyCode.Mouse1))
-					{
-						if(Input.GetAxis("Vertical")>0 && !run) anm.SetInteger ("Move", 1); //Forward
-						else if(Input.GetAxis("Vertical")>0) anm.SetInteger ("Move", 2); //Run
-						else if(Input.GetAxis("Vertical")<0) anm.SetInteger ("Move", -1);	//Backward
-						else if(Input.GetAxis("Horizontal")>0) anm.SetInteger ("Move", -10); //Strafe-
-						else if(Input.GetAxis("Horizontal")<0) anm.SetInteger ("Move", 10); //Strafe+
-						anm.SetFloat("Turn", Mathf.LerpAngle(anm.GetFloat("Turn"), Input.GetAxis("Mouse X"), ang_t)); //Turn
-					}
-					else
-					{
-						delta = Mathf.DeltaAngle(manager.transform.eulerAngles.y, transform.eulerAngles.y-Mathf.Atan2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))*Mathf.Rad2Deg);
-						if(!run)
-						{
-							if(delta>135) anm.SetInteger ("Move", -10); //Turn
-							else if(delta<-135) anm.SetInteger ("Move", 10); //Turn
-							else anm.SetInteger ("Move", 1); //Walk
-						}
-						else
-						{
-							if(delta>135 | delta<-135) anm.SetInteger ("Move", 1); //Walk
-							else anm.SetInteger ("Move", 2); //Run
-						}
-						anm.SetFloat("Turn", Mathf.LerpAngle(anm.GetFloat("Turn"), Mathf.Clamp(-delta/45, -1.0f, 1.0f), ang_t)); //Turn
-					}
-				}
-			}
+		
 			//Stoped
-			else
-			{
-				if((CanSwim | CanFly) && !IsOnGround) //Flying/Swim
-				{
-					if(CanSwim && anm.GetFloat("Pitch")!=0 && !Input.GetKey(KeyCode.Mouse1))
-					{
-						if(run) anm.SetInteger ("Move", 2); else anm.SetInteger ("Move", 1);
-					} else anm.SetInteger ("Move", 0);
-
-					anm.SetFloat("Turn", Mathf.LerpAngle(anm.GetFloat("Turn"), 0.0f, ang_t));
-				}
-				else //Terrestrial
-				{
-					if(HasSideAttack) //Tail attack
-					{	
-						delta = Mathf.DeltaAngle(manager.transform.eulerAngles.y, transform.eulerAngles.y);
-						if(delta>-135 && delta<0 && anm.GetBool("Attack")) anm.SetInteger ("Move", 10);
-						else if(delta<135 && delta>0 && anm.GetBool("Attack")) anm.SetInteger ("Move", -10); 
-						else anm.SetInteger ("Move", 0);
-						anm.SetFloat("Turn", Mathf.LerpAngle(anm.GetFloat("Turn"), 0.0f, ang_t));
-					}
-					else if(Input.GetKey(KeyCode.Mouse1))
-					{
-						if(Input.GetAxis("Mouse X")>0) anm.SetInteger ("Move", -10); //Strafe- 
-						else if(Input.GetAxis("Mouse X")<0) anm.SetInteger ("Move", 10); //Strafe+
-						else anm.SetInteger ("Move", 0);
-						anm.SetFloat("Turn", Mathf.LerpAngle(anm.GetFloat("Turn"), Mathf.Clamp(Input.GetAxis("Mouse X"), -1.0f, 1.0f), ang_t));
-					}
-					else { anm.SetInteger ("Move", 0); anm.SetFloat("Turn", Mathf.LerpAngle(anm.GetFloat("Turn"), 0.0f, ang_t)); } //Stop
-				}
-			}
+			
 
 			//Idles
 			if(Input.GetKey(KeyCode.E))
@@ -341,7 +232,7 @@ public class shared : MonoBehaviour
 			}
 			else if(Input.GetKey(KeyCode.F)) //Eat / Drink
 			{
-				if(vectorTGT==Vector3.zero) FindPlayerFood(); //looking for food
+				if(vectorTGT==Vector3.zero)  //looking for food
 				//Drink
 				if(IsOnWater)
 				{
@@ -430,58 +321,7 @@ public class shared : MonoBehaviour
 
 //***********************************************************************************************************************************************************************************************************
 // FIND PLAYER FOOD
-bool FindPlayerFood()
-{
-		//Find carnivorous food (looking for a dead creature in range)
-		if(regime.Equals("Carnivorous"))
-		{
-			foreach (GameObject element in manager.creaturesList.ToArray())
-			{
-				if((element.transform.position-fixedHeadPos).magnitude>scale.z) continue; //not in range
-				shared otherCreature= element.GetComponent<shared>(); //Get other creature script
-				if(otherCreature.IsDead) { objectTGT=otherCreature.gameObject; vectorTGT = otherCreature.body.worldCenterOfMass; return true; } // meat found
-			}
-		}
-		else
-		{
-			//Find herbivorous food (looking for trees/details on terrain in range )
-			if(manager.terrain)
-			{
-				//Large creature, look for trees
-				if(withersSize>8) 
-				{
-					Vector3 V1=Vector3.zero;  float i=0; RaycastHit hit;
-					while(i<360)
-					{
-						V1=transform.position+(Quaternion.Euler(0, i, 0)*Vector3.forward*(scale.y*2));
-						if(Physics.Linecast(V1+Vector3.up*withersSize, transform.position+Vector3.up*withersSize, out hit, manager.treeLayer))
-						{ vectorTGT = hit.point; return true; } //tree found
-						else { i++; V1=Vector3.zero; } // not found, continue
-					}
-				}
-				//Look for grass detail
-				else
-				{
-					TerrainData data=manager.terrain.terrainData;
-					int res= data.detailResolution, layer=0;
-					float x = ((transform.position.x - manager.terrain.transform.position.x) / data.size.z * res), y = ((transform.position.z - manager.terrain.transform.position.z) / data.size.x * res);
 
-					for(layer=0; layer<data.detailPrototypes.Length; layer++)
-					{
-						if(data.GetDetailLayer( (int) x,  (int) y, 1, 1, layer) [ 0, 0]>0)
-						{
-							vectorTGT.x=(data.size.x/res)*x+manager.terrain.transform.position.x;
-							vectorTGT.z=(data.size.z/res)*y+manager.terrain.transform.position.z;
-							vectorTGT.y = manager.terrain.SampleHeight( new Vector3(vectorTGT.x, 0, vectorTGT.z)); 
-							objectTGT=null; return true; 
-						}
-					}
-				}
-			}
-		}
-
-		objectTGT=null; vectorTGT=Vector3.zero; return false; //nothing found...
-}
 
 //***********************************************************************************************************************************************************************************************************
 // MANAGE COLLISIONS, DAMAGES AND BLOOD FX
