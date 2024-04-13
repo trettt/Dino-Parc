@@ -62,16 +62,17 @@ public class FirstPersonController : MonoBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
             
         }
-        animator.SetTrigger("isMoving");
+       
         characterController.Move(moveDirection * Time.deltaTime);
        
 
 
         if (canMove)
-        {
+        {  
             rotationX += -Input.GetAxis("Mouse Y") * mouseSpeed;
             rotationX = Mathf.Clamp(rotationX, -45f, 45f); // the player can't look up or down more than 45 degrees
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            animator.SetTrigger("isMoving");
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * mouseSpeed, 0);
         }
 
@@ -80,7 +81,7 @@ public class FirstPersonController : MonoBehaviour
 
     public bool isMoving()
     {
-        animator.SetTrigger("isMoving");
+        
         return moving;
     }
 
