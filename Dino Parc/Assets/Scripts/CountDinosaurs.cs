@@ -5,6 +5,9 @@ using UnityEngine;
 public class CountDinosaurs : MonoBehaviour
 {
     [SerializeField] private float detectionRadius;
+    [SerializeField] private AudioSource discoveryAudioSource; 
+    [SerializeField] private AudioClip discoveryClip; 
+
     private Transform player;
     private float distanceToPlayer;
     private bool isHovering = false;
@@ -15,6 +18,10 @@ public class CountDinosaurs : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         dinosaurName = gameObject.name;
+
+        
+        discoveryAudioSource.playOnAwake = false;
+        discoveryAudioSource.clip = discoveryClip; 
     }
 
     void Update()
@@ -28,6 +35,12 @@ public class CountDinosaurs : MonoBehaviour
             {
                 DinosaursManager.instance.AddDiscoveredDinosaur(dinosaurName);
                 message = "Discovered " + dinosaurName;
+
+                
+                if (!discoveryAudioSource.isPlaying)
+                {
+                    discoveryAudioSource.Play();
+                }
             }
         }
     }
