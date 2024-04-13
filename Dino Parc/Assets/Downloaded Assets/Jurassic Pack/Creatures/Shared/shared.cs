@@ -177,7 +177,7 @@ public class shared : MonoBehaviour
 		if(manager.UseManager && transform.gameObject==manager.creaturesList[manager.selected].gameObject && manager.CameraMode!=0)
 		{
 			//Run key
-			bool run; if(Input.GetKey(KeyCode.LeftShift)) run= true; else run=false;
+			
 
 			//Attack key
 			if(CanAttack) { if(Input.GetKey(KeyCode.Mouse0)) anm.SetBool ("Attack", true); else anm.SetBool ("Attack", false); }

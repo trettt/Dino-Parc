@@ -11,21 +11,23 @@ public class FirstPersonController : MonoBehaviour
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpPower;
-
+    [SerializeField] private Animator animator;
     [SerializeField] private float gravity;  // gravity force applied whenn the player is jumping
     [SerializeField] private float mouseSpeed;
 
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
-
+    
     private bool moving = false;
     private bool canMove = true;
     private CharacterController characterController;
-
+    private static readonly int MoveState = Animator.StringToHash("Base Layer.move"); private static readonly int IdleState = Animator.StringToHash("Base Layer.idle");
+    private static readonly int JumpState = Animator.StringToHash("Base Layer.jump");
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        animator=GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked; // lock the cursor in the center of the screen
         Cursor.visible = false; // hide the cursor
     }
@@ -44,6 +46,8 @@ public class FirstPersonController : MonoBehaviour
 
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
         {
+            animator.SetTrigger("isJump");
+            animator.speed = 3f;
             moveDirection.y = jumpPower;
             moving = false;
         }
@@ -54,10 +58,14 @@ public class FirstPersonController : MonoBehaviour
 
         if (!characterController.isGrounded)
         {
+            
             moveDirection.y -= gravity * Time.deltaTime;
+            
         }
-
+        animator.SetTrigger("isMoving");
         characterController.Move(moveDirection * Time.deltaTime);
+       
+
 
         if (canMove)
         {
@@ -72,6 +80,7 @@ public class FirstPersonController : MonoBehaviour
 
     public bool isMoving()
     {
+        animator.SetTrigger("isMoving");
         return moving;
     }
 
