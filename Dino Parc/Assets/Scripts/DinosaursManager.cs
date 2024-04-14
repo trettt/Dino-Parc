@@ -7,6 +7,8 @@ public class DinosaursManager : MonoBehaviour
 {
     public static DinosaursManager instance;
     [SerializeField] private TextMeshProUGUI count;
+    [SerializeField] private ParticleSystem meteorShower;
+    [SerializeField] private AudioSource explosionSound;
 
     private List<string> discoveredDinosaurs = new List<string>();
 
@@ -22,9 +24,13 @@ public class DinosaursManager : MonoBehaviour
         }
     }
 
+
     private void Start()
     {
         count.text = "Discovered dinosaurs: " + discoveredDinosaurs.Count.ToString() + "  / 13";
+
+        meteorShower.Stop();
+        explosionSound.playOnAwake = false;
     }
 
     public void AddDiscoveredDinosaur(string dinosaurTag)
@@ -42,4 +48,26 @@ public class DinosaursManager : MonoBehaviour
     {
         return discoveredDinosaurs.Count;
     }
+
+    private void Update()
+    {
+        if (GetDiscoveredDinosaursCount () == 13)
+        {
+            count.text = "All dinosaurs discovered!";
+            meteorShower.Play();
+            if (!explosionSound.isPlaying)
+            {
+                explosionSound.loop = true;
+                explosionSound.Play();
+            }
+
+            Invoke("TheEnd", 5f);
+        }
+    }
+
+    private void TheEnd()
+    {
+        Application.Quit();
+    }
+
 }
