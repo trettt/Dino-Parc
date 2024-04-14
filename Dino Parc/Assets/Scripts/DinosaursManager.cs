@@ -29,7 +29,6 @@ public class DinosaursManager : MonoBehaviour
         count.text = "Discovered dinosaurs: " + discoveredDinosaurs.Count.ToString() + "  / 13";
 
         meteorShower.Stop();
-        explosionSound.playOnAwake = false;
     }
 
     public void AddDiscoveredDinosaur(string dinosaurTag)
