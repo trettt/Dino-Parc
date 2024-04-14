@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,6 +11,7 @@ public class DinosaursManager : MonoBehaviour
 
     private List<string> discoveredDinosaurs = new List<string>();
 
+    // Unity calls Awake when an enabled script instance is being loaded.
     private void Awake()
     {
         if (instance == null)
@@ -23,7 +23,6 @@ public class DinosaursManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 
     private void Start()
     {

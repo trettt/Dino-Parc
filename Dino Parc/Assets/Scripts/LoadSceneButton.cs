@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement; // Asigură-te că ai această linie pentru a folosi SceneManager
+using UnityEngine.SceneManagement;
 
 public class LoadSceneButton : MonoBehaviour
 {

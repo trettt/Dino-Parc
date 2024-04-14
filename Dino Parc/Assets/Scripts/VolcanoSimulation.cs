@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class VolcanoSimulation : MonoBehaviour
 {
@@ -8,7 +6,7 @@ public class VolcanoSimulation : MonoBehaviour
     [SerializeField] private AudioSource lavaSound;
 
     private string message = "PRESS E TO START THE SIMULATION";
-    private bool isHovering = false;
+    private bool playerIsNear = false;
     private bool isSimulationActive = false;
     private Transform player;
     private float distanceToPlayer;
@@ -31,16 +29,14 @@ public class VolcanoSimulation : MonoBehaviour
     private void Update()
     {
         distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        isHovering = distanceToPlayer <= detectionRadius;
+        playerIsNear = distanceToPlayer <= detectionRadius;
 
-        if (isHovering && Input.GetKeyDown(KeyCode.E) && !isSimulationActive)
+        if (playerIsNear && Input.GetKeyDown(KeyCode.E) && !isSimulationActive)
         {
             smokeParticles.Stop();
             StartSimulation();
             message = "";
         }
-
-    
     }
 
     private void StartSimulation()
@@ -48,9 +44,7 @@ public class VolcanoSimulation : MonoBehaviour
         isSimulationActive = true;
 
         Invoke("StartLavaFlow", 5f);
-
         Invoke("StopSimulation", 15f);
-
         Invoke("ShowMessage", 15f);
 
         Camera.main.GetComponent<CameraShake>().Shake(15f, 0.3f);
@@ -77,7 +71,7 @@ public class VolcanoSimulation : MonoBehaviour
 
     private void OnGUI()
     {
-        if (isHovering && message != "")
+        if (playerIsNear && message != "")
         {
             GUIStyle style = new GUIStyle(GUI.skin.label);
             style.fontSize = 20;
@@ -88,5 +82,4 @@ public class VolcanoSimulation : MonoBehaviour
             GUI.Label(new Rect(0, Screen.height - 50, Screen.width, 50), message, style);
         }
     }
-
 }

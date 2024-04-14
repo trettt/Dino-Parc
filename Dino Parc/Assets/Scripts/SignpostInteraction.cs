@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI; 
+﻿using UnityEngine;
 
 public class SignpostInteraction : MonoBehaviour
 {
@@ -16,7 +13,6 @@ public class SignpostInteraction : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        
         infoPanel.SetActive(false);
     }
 

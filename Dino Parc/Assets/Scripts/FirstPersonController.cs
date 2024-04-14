@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 // can handle basic collisions and physics for the player without the need for a rigidbody
 [RequireComponent(typeof(CharacterController))] 
@@ -21,8 +19,6 @@ public class FirstPersonController : MonoBehaviour
     private bool moving = false;
     private bool canMove = true;
     private CharacterController characterController;
-    private static readonly int MoveState = Animator.StringToHash("Base Layer.move"); private static readonly int IdleState = Animator.StringToHash("Base Layer.idle");
-    private static readonly int JumpState = Animator.StringToHash("Base Layer.jump");
 
     void Start()
     {
@@ -64,8 +60,6 @@ public class FirstPersonController : MonoBehaviour
         }
        
         characterController.Move(moveDirection * Time.deltaTime);
-       
-
 
         if (canMove)
         {  
@@ -89,6 +83,4 @@ public class FirstPersonController : MonoBehaviour
     {
         return characterController.isGrounded;
     }
-
-
 }

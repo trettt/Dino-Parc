@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CountDinosaurs : MonoBehaviour
 {
@@ -10,7 +8,7 @@ public class CountDinosaurs : MonoBehaviour
 
     private Transform player;
     private float distanceToPlayer;
-    private bool isHovering = false;
+    private bool playerIsNear = false;
     private string dinosaurName;
     private string message = "";
 
@@ -27,9 +25,9 @@ public class CountDinosaurs : MonoBehaviour
     void Update()
     {
         distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        isHovering = distanceToPlayer <= detectionRadius;
+        playerIsNear = distanceToPlayer <= detectionRadius;
 
-        if (isHovering)
+        if (playerIsNear)
         {
             if (!IsDinosaurDiscovered(dinosaurName))
             {
@@ -52,7 +50,7 @@ public class CountDinosaurs : MonoBehaviour
 
     private void OnGUI()
     {
-        if (isHovering && IsDinosaurDiscovered(dinosaurName))
+        if (playerIsNear && IsDinosaurDiscovered(dinosaurName))
         {
             GUIStyle style = new GUIStyle(GUI.skin.label);
             style.fontSize = 20;

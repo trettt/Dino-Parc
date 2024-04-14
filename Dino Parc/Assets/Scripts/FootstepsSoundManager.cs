@@ -13,7 +13,6 @@ public class FootstepsSoundManager : MonoBehaviour
 
     void Update()
     {
-        // Play footstep sound if the player is grounded and moving
         if (player.isMoving() && player.isGrounded())
         {
             if (!footstepSound.isPlaying)
